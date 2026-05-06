@@ -1,0 +1,127 @@
+{
+  "name": "AI Recruitment Automation Flow",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "analyze-resume",
+        "options": {}
+      },
+      "id": "1",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:8000/analyze",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "resume_text",
+              "value": "={{ $json.body.resume_content }}"
+            },
+            {
+              "name": "job_description",
+              "value": "={{ $json.body.jd }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2",
+      "name": "Analyze with LangChain",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.score }}",
+              "operation": "largerEqual",
+              "value2": 80
+            }
+          ]
+        }
+      },
+      "id": "3",
+      "name": "Score > 80?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [750, 300]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "channel": "recruitment-alerts",
+        "text": "==✅ High Potential Candidate Found! \nScore: {{ $json.score }}\nSummary: {{ $json.fit_summary }}",
+        "otherOptions": {}
+      },
+      "id": "4",
+      "name": "Notify Team (Success)",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.1,
+      "position": [1000, 200]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "channel": "recruitment-alerts",
+        "text": "==❌ Candidate Rejected\nScore: {{ $json.score }}\nReason: {{ $json.missing_skills }}",
+        "otherOptions": {}
+      },
+      "id": "5",
+      "name": "Log Rejection",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.1,
+      "position": [1000, 400]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Analyze with LangChain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze with LangChain": {
+      "main": [
+        [
+          {
+            "node": "Score > 80?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score > 80?": {
+      "main": [
+        [
+          {
+            "node": "Notify Team (Success)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Rejection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
