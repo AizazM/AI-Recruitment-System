@@ -12,15 +12,19 @@ An end-to-end visualization of the candidate journey—from resume submission vi
 
 ### 2. n8n Workflow Logic
 The orchestration layer where PDF-to-text conversion and API routing are managed visually.
-![n8n Logic](assets/n8n_workflow.png)
+![n8n Logic](assets/n8n_workflow.png.jpg)
+
+
+
+
 
 ### 3. LangChain Internal Architecture
 A detailed look at the "AI Brain," showcasing how structured output parsers and LLM chains evaluate candidate data.
-![LangChain Architecture](assets/langchain_logic.png)
+![LangChain Architecture](assets/langchain_logic.png.jfif)
 
 ### 4. Automated Action Workflow
 The decision loop that triggers Slack notifications and personalized feedback based on the AI-calculated score.
-![Action Workflow](assets/action_workflow.png)
+![Action Workflow](assets/action_workflow.png.jpg)
 
 ---
 
