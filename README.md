@@ -6,7 +6,7 @@ A production-ready automation system designed to streamline the hiring process u
 
 ### 1. Platform Overview
 An end-to-end visualization of the candidate journey—from resume submission via Gmail or Google Drive to the final automated decision.
-![Platform Overview](assets/platform_overview.png)
+![Platform Overview][(assets/platform_overview.png)](https://github.com/AizazM/AI-Recruitment-System/blob/main/assets/action_workflow.png.jpg?raw=true)
 
 ### 2. n8n Workflow Logic
 The orchestration layer where PDF-to-text conversion and API routing are managed visually.
